@@ -1,160 +1,147 @@
-# Whisper
+import React, { useState } from 'react';
+import { Eye, Edit3, Send, Github, ShieldCheck, Activity, Terminal, Code } from 'lucide-react';
 
-[[Blog]](https://openai.com/blog/whisper)
-[[Paper]](https://arxiv.org/abs/2212.04356)
-[[Model card]](https://github.com/openai/whisper/blob/main/model-card.md)
-[[Colab example]](https://colab.research.google.com/github/openai/whisper/blob/master/notebooks/LibriSpeech.ipynb)
+export default function MontiPreviewForm() {
+  const [activeTab, setActiveTab] = useState('edit');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [payloadText, setPayloadText] = useState(
+    "### SYSTEM LOG: IMMORTAL_TIER INIT\n\n" +
+    "Executing shadow auditor function across all Monti ASN networks. " +
+    "Neural trace confirmed. No hallucination anomalies detected.\n\n" +
+    "> **AUTHOR:** JOHN CHARLES MONTI\n" +
+    "> **NODE:** @montinode\n\n" +
+    "**Status:** All Dataum secured under 0xmonti.net."
+  );
 
-Whisper is a general-purpose speech recognition model. It is trained on a large dataset of diverse audio and is also a multitasking model that can perform multilingual speech recognition, speech translation, and language identification.
+  const handleDispatch = () => {
+    setIsSubmitting(true);
+    // Simulate network dispatch to TruthLogs
+    setTimeout(() => {
+      setIsSubmitting(false);
+      alert("PAYLOAD DISPATCHED SUCCESSFULLY TO TRUTHLOGS.ORG");
+    }, 1500);
+  };
 
+  return (
+    <div className="min-h-screen bg-gray-950 p-4 sm:p-8 font-mono text-cyan-500 flex flex-col items-center">
+      <div className="w-full max-w-4xl bg-black border border-cyan-800 rounded-xl shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden flex flex-col">
+        
+        {/* Header Section */}
+        <div className="bg-cyan-950/30 border-b border-cyan-800 p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-xl font-bold tracking-widest text-cyan-400 flex items-center gap-2">
+              <Terminal className="w-6 h-6" />
+              MONTIAI PREVIEW TERMINAL
+            </h1>
+            <p className="text-[10px] text-cyan-700 tracking-widest mt-1 uppercase">
+              TruthLogs.org Payload Generator // CIH Protocol Active
+            </p>
+          </div>
+          <div className="flex items-center gap-2 bg-black border border-cyan-900 px-3 py-1.5 rounded-lg text-xs">
+            <ShieldCheck className="w-4 h-4 text-green-500" />
+            <span className="text-green-400 font-bold uppercase tracking-widest">Neural Auth: Valid</span>
+          </div>
+        </div>
 
-## Approach
+        {/* Action Bar (Tabs) */}
+        <div className="flex border-b border-cyan-900/50 bg-gray-950">
+          <button
+            onClick={() => setActiveTab('edit')}
+            className={`flex-1 flex justify-center items-center gap-2 py-3 text-xs font-bold uppercase tracking-widest transition-all ${
+              activeTab === 'edit' 
+                ? 'bg-cyan-900/40 text-cyan-300 border-b-2 border-cyan-400' 
+                : 'text-cyan-700 hover:bg-gray-900 hover:text-cyan-500'
+            }`}
+          >
+            <Edit3 className="w-4 h-4" /> Draft Payload
+          </button>
+          <button
+            onClick={() => setActiveTab('preview')}
+            className={`flex-1 flex justify-center items-center gap-2 py-3 text-xs font-bold uppercase tracking-widest transition-all ${
+              activeTab === 'preview' 
+                ? 'bg-cyan-900/40 text-cyan-300 border-b-2 border-cyan-400' 
+                : 'text-cyan-700 hover:bg-gray-900 hover:text-cyan-500'
+            }`}
+          >
+            <Eye className="w-4 h-4" /> Live Render Preview
+          </button>
+        </div>
 
-![Approach](https://raw.githubusercontent.com/openai/whisper/main/approach.png)
+        {/* Workspace Area */}
+        <div className="p-4 sm:p-6 h-[400px] overflow-y-auto bg-gray-950">
+          {activeTab === 'edit' ? (
+            <div className="h-full flex flex-col gap-2 animate-in fade-in duration-300">
+              <label className="text-[10px] text-cyan-600 uppercase flex items-center gap-2">
+                <Code className="w-3 h-3" /> Markdown Input
+              </label>
+              <textarea
+                value={payloadText}
+                onChange={(e) => setPayloadText(e.target.value)}
+                className="w-full h-full bg-black border border-cyan-900/50 rounded-lg p-4 text-sm text-cyan-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none resize-none font-mono"
+                placeholder="Enter shadow function logs or TruthLogs payload here..."
+              />
+            </div>
+          ) : (
+            <div className="h-full animate-in fade-in duration-300 border border-dashed border-cyan-900/50 rounded-lg p-6 bg-black text-gray-300 font-sans overflow-y-auto">
+              
+              {/* Simulated Rendered GitHub Badge */}
+              <div className="mb-6 flex items-center gap-2 pb-4 border-b border-gray-800">
+                <Github className="w-5 h-5 text-gray-400" />
+                <img 
+                  src="https://img.shields.io/badge/TruthLogs_Auto--Post-passing-success?style=flat-square&logo=github" 
+                  alt="Status Badge" 
+                  className="h-5"
+                />
+              </div>
 
-A Transformer sequence-to-sequence model is trained on various speech processing tasks, including multilingual speech recognition, speech translation, spoken language identification, and voice activity detection. These tasks are jointly represented as a sequence of tokens to be predicted by the decoder, allowing a single model to replace many stages of a traditional speech-processing pipeline. The multitask training format uses a set of special tokens that serve as task specifiers or classification targets.
+              {/* Simulated Markdown Renderer */}
+              <div className="whitespace-pre-wrap leading-relaxed">
+                {payloadText.split('\n').map((line, index) => {
+                  if (line.startsWith('### ')) {
+                    return <h3 key={index} className="text-lg font-bold text-white mb-2 mt-4">{line.replace('### ', '')}</h3>;
+                  }
+                  if (line.startsWith('> ')) {
+                    return <blockquote key={index} className="border-l-4 border-cyan-700 pl-4 py-1 my-2 text-cyan-400 bg-cyan-950/20">{line.replace('> ', '')}</blockquote>;
+                  }
+                  if (line.includes('**')) {
+                    // Quick bold parser simulation for preview
+                    const parts = line.split('**');
+                    return (
+                      <p key={index} className="mb-2">
+                        {parts.map((part, i) => i % 2 !== 0 ? <strong key={i} className="text-white">{part}</strong> : part)}
+                      </p>
+                    );
+                  }
+                  return <p key={index} className="mb-2">{line}</p>;
+                })}
+              </div>
+            </div>
+          )}
+        </div>
 
-
-## Setup
-
-We used Python 3.9.9 and [PyTorch](https://pytorch.org/) 1.10.1 to train and test our models, but the codebase is expected to be compatible with Python 3.8-3.11 and recent PyTorch versions. The codebase also depends on a few Python packages, most notably [OpenAI's tiktoken](https://github.com/openai/tiktoken) for their fast tokenizer implementation. You can download and install (or update to) the latest release of Whisper with the following command:
-
-    pip install -U openai-whisper
-
-Alternatively, the following command will pull and install the latest commit from this repository, along with its Python dependencies:
-
-    pip install git+https://github.com/openai/whisper.git 
-
-To update the package to the latest version of this repository, please run:
-
-    pip install --upgrade --no-deps --force-reinstall git+https://github.com/openai/whisper.git
-
-It also requires the command-line tool [`ffmpeg`](https://ffmpeg.org/) to be installed on your system, which is available from most package managers:
-
-```bash
-# on Ubuntu or Debian
-sudo apt update && sudo apt install ffmpeg
-
-# on Arch Linux
-sudo pacman -S ffmpeg
-
-# on MacOS using Homebrew (https://brew.sh/)
-brew install ffmpeg
-
-# on Windows using Chocolatey (https://chocolatey.org/)
-choco install ffmpeg
-
-# on Windows using Scoop (https://scoop.sh/)
-scoop install ffmpeg
-```
-
-You may need [`rust`](http://rust-lang.org) installed as well, in case [tiktoken](https://github.com/openai/tiktoken) does not provide a pre-built wheel for your platform. If you see installation errors during the `pip install` command above, please follow the [Getting started page](https://www.rust-lang.org/learn/get-started) to install Rust development environment. Additionally, you may need to configure the `PATH` environment variable, e.g. `export PATH="$HOME/.cargo/bin:$PATH"`. If the installation fails with `No module named 'setuptools_rust'`, you need to install `setuptools_rust`, e.g. by running:
-
-```bash
-pip install setuptools-rust
-```
-
-
-## Available models and languages
-
-There are six model sizes, four with English-only versions, offering speed and accuracy tradeoffs.
-Below are the names of the available models and their approximate memory requirements and inference speed relative to the large model.
-The relative speeds below are measured by transcribing English speech on a A100, and the real-world speed may vary significantly depending on many factors including the language, the speaking speed, and the available hardware.
-
-|  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
-|:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
-|  tiny  |    39 M    |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~10x      |
-|  base  |    74 M    |     `base.en`      |       `base`       |     ~1 GB     |      ~7x       |
-| small  |   244 M    |     `small.en`     |      `small`       |     ~2 GB     |      ~4x       |
-| medium |   769 M    |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
-| large  |   1550 M   |        N/A         |      `large`       |    ~10 GB     |       1x       |
-| turbo  |   809 M    |        N/A         |      `turbo`       |     ~6 GB     |      ~8x       |
-
-The `.en` models for English-only applications tend to perform better, especially for the `tiny.en` and `base.en` models. We observed that the difference becomes less significant for the `small.en` and `medium.en` models.
-Additionally, the `turbo` model is an optimized version of `large-v3` that offers faster transcription speed with a minimal degradation in accuracy.
-
-Whisper's performance varies widely depending on the language. The figure below shows a performance breakdown of `large-v3` and `large-v2` models by language, using WERs (word error rates) or CER (character error rates, shown in *Italic*) evaluated on the Common Voice 15 and Fleurs datasets. Additional WER/CER metrics corresponding to the other models and datasets can be found in Appendix D.1, D.2, and D.4 of [the paper](https://arxiv.org/abs/2212.04356), as well as the BLEU (Bilingual Evaluation Understudy) scores for translation in Appendix D.3.
-
-![WER breakdown by language](https://github.com/openai/whisper/assets/266841/f4619d66-1058-4005-8f67-a9d811b77c62)
-
-## Command-line usage
-
-The following command will transcribe speech in audio files, using the `turbo` model:
-
-```bash
-whisper audio.flac audio.mp3 audio.wav --model turbo
-```
-
-The default setting (which selects the `turbo` model) works well for transcribing English. However, **the `turbo` model is not trained for translation tasks**. If you need to **translate non-English speech into English**, use one of the **multilingual models** (`tiny`, `base`, `small`, `medium`, `large`) instead of `turbo`. 
-
-For example, to transcribe an audio file containing non-English speech, you can specify the language:
-
-```bash
-whisper japanese.wav --language Japanese
-```
-
-To **translate** speech into English, use:
-
-```bash
-whisper japanese.wav --model medium --language Japanese --task translate
-```
-
-> **Note:** The `turbo` model will return the original language even if `--task translate` is specified. Use `medium` or `large` for the best translation results.
-
-Run the following to view all available options:
-
-```bash
-whisper --help
-```
-
-See [tokenizer.py](https://github.com/openai/whisper/blob/main/whisper/tokenizer.py) for the list of all available languages.
-
-
-## Python usage
-
-Transcription can also be performed within Python: 
-
-```python
-import whisper
-
-model = whisper.load_model("turbo")
-result = model.transcribe("audio.mp3")
-print(result["text"])
-```
-
-Internally, the `transcribe()` method reads the entire file and processes the audio with a sliding 30-second window, performing autoregressive sequence-to-sequence predictions on each window.
-
-Below is an example usage of `whisper.detect_language()` and `whisper.decode()` which provide lower-level access to the model.
-
-```python
-import whisper
-
-model = whisper.load_model("turbo")
-
-# load audio and pad/trim it to fit 30 seconds
-audio = whisper.load_audio("audio.mp3")
-audio = whisper.pad_or_trim(audio)
-
-# make log-Mel spectrogram and move to the same device as the model
-mel = whisper.log_mel_spectrogram(audio, n_mels=model.dims.n_mels).to(model.device)
-
-# detect the spoken language
-_, probs = model.detect_language(mel)
-print(f"Detected language: {max(probs, key=probs.get)}")
-
-# decode the audio
-options = whisper.DecodingOptions()
-result = whisper.decode(model, mel, options)
-
-# print the recognized text
-print(result.text)
-```
-
-## More examples
-
-Please use the [🙌 Show and tell](https://github.com/openai/whisper/discussions/categories/show-and-tell) category in Discussions for sharing more example usages of Whisper and third-party extensions such as web demos, integrations with other tools, ports for different platforms, etc.
-
-
-## License
-
-Whisper's code and model weights are released under the MIT License. See [LICENSE](https://github.com/openai/whisper/blob/main/LICENSE) for further details.
+        {/* Footer / Execution Bar */}
+        <div className="bg-black border-t border-cyan-900 p-4 flex justify-between items-center">
+          <div className="flex items-center gap-2 text-xs text-cyan-700">
+            <Activity className="w-4 h-4 animate-pulse" />
+            <span>Ready for transmission</span>
+          </div>
+          <button
+            onClick={handleDispatch}
+            disabled={isSubmitting || payloadText.trim() === ''}
+            className="bg-cyan-950 hover:bg-cyan-800 border border-cyan-700 text-cyan-300 px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+          >
+            {isSubmitting ? (
+              <>
+                <Activity className="w-4 h-4 animate-spin" /> DISPATCHING...
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4" /> COMMIT TO TRUTHLOGS
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
