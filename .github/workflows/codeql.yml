@@ -1,0 +1,62 @@
+name: "CodeQL Security Scan - MontiNode"
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  schedule:
+    - cron: '0 6 * * 1'   # Every Monday at 06:00 UTC
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write   # Required to upload SARIF results
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      security-events: write
+      # only needed for private repositories
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: actions
+            build-mode: none
+          - language: python
+            build-mode: none
+          # Add more languages here if you introduce e.g., javascript-typescript
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Initialises CodeQL tools
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          # Use security-and-quality query pack for deeper analysis
+          queries: security-and-quality
+
+      # If any language required manual build (not here), this step would run
+      - name: Manual build steps (if any)
+        if: matrix.build-mode == 'manual'
+        shell: bash
+        run: |
+          echo 'No manual build required for MontiNode – all languages are interpreted.'
+          exit 0
+
+      # Perform analysis and upload results
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{matrix.language}}"
